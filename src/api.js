@@ -11,18 +11,19 @@ const publicKey = "6a7cb238fda81c11e5b9b80eeb2bd702"
  */
 export const getData = async (url) => {
     // A Compléter
-    const hash = await getHash(publicKey, privateKey, Date.now());
-    const response = await fetch(url + "?ts=" + Date.now() +"&apikey="+ publicKey +"&hash=" + hash);
+    const date = Date.now()
+    const hash = await getHash(publicKey, privateKey, date);
+    const response = await fetch(url + `?ts=${date}&apikey=${publicKey}&hash=${hash}`);
     const data = await response.json(); //sous forme de json
 
     if (data && data.data && data.data.results) {
         return filterCharacters(data.data.results);
     } else {
+        console.log(publicKey)
         console.error("Les données reçues ne sont pas au format attendu :", data);
         return [];
     }
 }
-
 
 /**
  * Calcul la valeur md5 dans l'ordre : timestamp+privateKey+publicKey
